@@ -33,6 +33,7 @@ The Z-A constitutive model can be described as:
 ![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/2.png)
 
 ![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/3.png)
+
 The parameters for fitting the Z-A constitutive model are determined in the above article:
 
 | C1 | C2 | C3 | C4 | C5 | C6 | n |
@@ -74,7 +75,7 @@ print(data_supplement.tail())
     6407  3775.267864  0.399841  20.0      5000.0       0.0
 
 
-The presented data illustrate the structure of the dataset. There are totally five labels: stress, strain, temperature, strain rate, and porosity. 
+The presented data illustrate the structure of the dataset. There are totally 5 labels: stress, strain, temperature, strain rate, and porosity. 
 
 ######  -stress
 Stress shows the magnitude of the force during the compression process. The relationship between stress and compression force is: 
@@ -134,7 +135,7 @@ print(data_completion.tail())
     28892  650.272783  0.275821  25.0      2300.0      26.0
     28893  649.629803  0.276218  25.0      2300.0      26.0
 
-The variable <span style="background-color:#F0F0F0">data_completion</span> stores the complete dataset which has five columns and 28985 samples. The code for organizing data is in <mark>organize_data.py</mark>.
+The variable <span style="background-color:#F0F0F0">data_completion</span> stores the complete dataset which has 5 columns and 28984 samples. The code for organizing data is in <mark>organize_data.py</mark>.
 
 
 
