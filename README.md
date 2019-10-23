@@ -30,9 +30,9 @@ The first part of data is in the file <mark>data.csv</mark>, and the code for cr
 
 The Z-A constitutive model can be described as:
 
-<img src="C:\Users\59665\Desktop\oct\finish20-23\photo\2.png" style="zoom: 80%;" />
+![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/2.png)
 
-<img src="C:\Users\59665\Desktop\oct\finish20-23\photo\3.png" style="zoom:80%;" />
+![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/3.png)
 The parameters for fitting the Z-A constitutive model are determined in the above article:
 
 | C1 | C2 | C3 | C4 | C5 | C6 | n |
@@ -41,7 +41,7 @@ The parameters for fitting the Z-A constitutive model are determined in the abov
 
 Because the above formula only describes the compression process after yield stage, the process before yield limit should be added, which presents a proportional relation between stress and strain (Hooke's law). The yield stress with different loading conditions can be determined by the following table:
 
-<img src="C:\Users\59665\Desktop\oct\finish20-23\photo\4.png"  />
+![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/4.png)
 
 The variables are in the constitutive model are stress, strain, temperature and strain rate. It is clear to determine temperature and strain rate first, and generate stress-strain curves. The code to create the second part of data is in <mark>create_data.py</mark>, and now we can run it.
 
@@ -53,7 +53,7 @@ os.chdir('G:\\data') # change the current working directory
 ```
 
 
-![png](output_8_0.png)
+![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/output_8_0.png)
 
 By now, eight groups of supplementary data are created and combined. The data are saved in the variable <span style="background-color:#E0E0E0">data_supplement</span>.
 
@@ -156,10 +156,7 @@ plt.plot()
 
 
 
-
-
-
-![png](output_19_1.png)
+![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/output_19_1.png)
 
 
 As the figure shows, the features reflect obvious nonlinear relationships. However, there are two exceptions: stress-porosity and stress-strain. 
@@ -417,7 +414,7 @@ plt.show()
 ```
 
 
-![png](output_45_0.png)
+![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/output_45_0.png)
 
 
 As the figure shows, while <span style="background-color:#E0E0E0">max_depth</span> is larger than 10, the r^2 score tend to convergent to 1. While <span style="background-color:#E0E0E0">max_depth</span> is larger than 30, the MAE tend to convergent to 3. When <span style="background-color:#E0E0E0">max_depth</span> is around 50, we can get a hightest r^2 score and a smallest MAE. That means the optimal <span style="background-color:#E0E0E0">max_depth</span> for this model is near 50. 
@@ -531,7 +528,7 @@ plt.show()
 ```
 
 
-![png](output_59_0.png)
+![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/output_59_0.png)
 
 
 #### 8.5 Prediction of One-dimensional Constitutive Model
@@ -590,7 +587,7 @@ plt.show()
 ```
 
 
-![png](output_62_0.png)
+![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/output_62_0.png)
 
 
 The 3D figure presents the stress-strain curves along the temperature dimension with 2380/s strain rate and 27.5% porosity.
@@ -647,7 +644,7 @@ plt.show()
 ```
 
 
-![png](output_64_0.png)
+![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/output_64_0.png)
 
 
 The 3D figure indicates that the titanium alloy with larger porosity has weaker compression resistance, that is in agreement to the law from the experiments.
@@ -718,7 +715,7 @@ plt.show()
 ```
 
 
-![png](output_66_0.png)
+![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/output_66_0.png)
 
 
 From the 3D figure, we find that porous titanium alloy presents the better plasticity in the high strain rate compression because the pores collapse with a larger strain. This prediction conforms to the law from the compression test data, which proves the high accuracy of this constitutive model.
@@ -747,7 +744,7 @@ A good model may not be built in one day, and it needs be upgraded continuously.
 
 To increase the generalization ability, R. Quinlan and Yong Wang invented the M5 algorithm, and later it was reconstructed to M5P for inducing trees of regression models. M5P algorithm combines a conventional decision tree with the possibility of linear regression functions at the nodes. The mechanism of the algorithm can be demonstrate by a picture:
 
-<img src="C:\Users\59665\Desktop\oct\finish20-23\photo\5.png" style="zoom: 25%;" />
+!()[https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/5.png]
 
 This picture is from "https://github.com/ankonzoid/LearningX/tree/master/advanced_ML/model_tree". We can see that M5P algorithm inserts linear regression into the nodes of decision tree. It is effective to deal with the data whose features have strong linear relationship with the target.
 
@@ -759,4 +756,4 @@ Because of the expensive calculation of neural network with model tree, this pro
 
 This project concentrates on data organization and constructing the prediction model to generalize the constitutive model for porous titanium alloy. For users, it is convenient to look up the stress-strain curves in a GUI. Here is a sample of the GUI design.
 
-<img src="C:\Users\59665\Desktop\oct\finish20-23\photo\6.png" style="zoom: 67%;" />
+!()[https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/6.png]
