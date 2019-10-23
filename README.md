@@ -6,7 +6,7 @@ ___
 
 The goal of this project is to predict a generalized constitutive model for porous titanium alloy, based on two sets of constitutive data with 26% and 36% porosity, under various temperatures and strain rates.
 
-The constitutive relationship (stress - strain relationship) reflects a basic but an important mechanical property of materials. Compared to dense titanium alloy, porous titanium has more complicated constitutive relationship. On one hand, the porous structure makes a inhomogeneous stress distribution. On the other hand, the pores may collapse in the compression process. 
+The constitutive relationship (stress-strain relationship) reflects a basic but an important mechanical property of materials. Compared to dense titanium alloy, porous titanium has more complicated constitutive relationship. On one hand, the porous structure makes a inhomogeneous stress distribution. On the other hand, the pores may collapse in the compression process. 
 
 The research on porous titanium alloy is a hotspot since the porous titanium alloy has great application value in the aerospace and medical fields, and the generalized constitutive model for porous titanium alloy could provide the researchers a reference to basic mechanical properties without time-consuming compression experiments.
 
