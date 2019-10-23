@@ -1,8 +1,8 @@
-## A Generalized Constitutive Model for Porous Titanium Alloy 
+# A Generalized Constitutive Model for Porous Titanium Alloy 
 
 #### By Yun Zhou (zhou165@usc.edu)
 ___
-### 1. Description & Objective
+## 1. Description & Objective
 
 The goal of this project is to predict a generalized constitutive model for porous titanium alloy, based on two sets of constitutive data with 26% and 36% porosity, under various temperatures and strain rates.
 
@@ -14,7 +14,7 @@ The research on porous titanium alloy is a hotspot since the porous titanium all
 
 
 
-### 2. Data Source
+## 2. Data Source
 
 As the figure above shows, the data include two parts. 
 
@@ -24,9 +24,9 @@ However, the experiments for the constitutive relationship of dense titanium all
 
 The first part of data is in the file <mark>data.csv</mark>, and the code for creating the second part of data is in <mark>create_data.py</mark>, which will be shown in section 3.     
 
-​       
 
-### 3. Supplement to Data
+
+## 3. Supplement to Data
 
 The Z-A constitutive model can be described as:
 
@@ -60,7 +60,7 @@ By now, eight groups of supplementary data are created and combined. The data ar
 
 
 
-### 4. Description of Data
+## 4. Description of Data
 
 
 ```python
@@ -103,7 +103,7 @@ Porosity is a measure of the void spaces in titanium alloy, i.e. a fraction of t
 
 
 
-### 5. Data Organizing
+## 5. Data Organizing
 
 Now the second part of data (supplementary data) is created, and it should be combined with the first part of data, which is in the file <font color='grey'>data.csv</font>.
 
@@ -139,7 +139,7 @@ The variable <span style="background-color:#F0F0F0">data_completion</span> store
 
 
 
-### 6. Exploratory Data Analysis
+## 6. Exploratory Data Analysis
 
 
 ```python
@@ -170,7 +170,7 @@ The code for Exploratory Data Analysis is in <mark>EDA.py</mark>.
 
 
 
-### 7. An Attempt to Generalize the Constitutive Model
+## 7. An Attempt to Generalize the Constitutive Model
 
 The generalization for constitutive model can be transferred into a regression problem in machine learning because we expect a set of stress values as the output, by giving a group of continuous strain values, including the specified temperature, strain rate, and porosity.
 
@@ -178,7 +178,7 @@ There are several useful and convenient regression  by algorithms, such as linea
 
 Compared to linear and polynomial kernels, the radial basis function (RBF) kernel is more suitable to deal with nonlinear regression. Hence, we will choose SVR using RBF kernel to generalize this constitutive model.
 
-#### 7.1 Data Preprocessing (Scale Feature Values & Shuffle and Split Data)
+### 7.1 Data Preprocessing (Scale Feature Values & Shuffle and Split Data)
 
 As the output shows above, these four features differ significantly in value magnitude. For example, the range of strain is from 0 to 0.5098, whereas the range of strain rate is from 500 to 5200. If we input these samples for training directly, the contours of the cost function will be prolate rather than round, and the process of gradient descent will not only be tortuous but also time-consuming.
 
@@ -246,7 +246,7 @@ print(Y_train)
 
 The data is split into four parts: X_train, X_test, Y_train, Y_test, and the order is shuffled.
 
-#### 7.2 Create Support Vector Regressor
+### 7.2 Create Support Vector Regressor
 
 
 ```python
@@ -256,7 +256,7 @@ reg_rbf = SVR(C=1050, kernel='rbf', gamma=4e-3, epsilon = 0.07)
 
 The most important SVR parameter is kernel type. For nonlinear regression, it is popular to select polynomial or gaussian. Here, he select RBF kernel, which is a kind of gaussian-type kernels. The other parameters are tentatively determined as following: <span style="background-color:#E0E0E0">gamma</span> = 4e-3, <span style="background-color:#E0E0E0">epsilon</span> = 0.07, and they can be adjusted according to the test results.
 
-#### 7.3 Train/Test Split for Regression
+### 7.3 Train/Test Split for Regression
 
 
 ```python
@@ -283,7 +283,7 @@ According to the root mean squared error, we can preliminarily suppose that this
 
 There are a number of potential reasons which lead to the bad imitative effect, such as under fitting/over fitting and the inapplicability of SVR to this dataset. We can use cross validation to eliminate under fitting/over fitting. 
 
-#### 7.4 Cross Validation & Parameters Adjustment
+### 7.4 Cross Validation & Parameters Adjustment
 
 
 ```python
@@ -310,7 +310,7 @@ The code for SVR is in <mark>SVR.py</mark>.
 
 
 
-### 8. A More Effective Way to Generalize the Constitutive Model
+## 8. A More Effective Way to Generalize the Constitutive Model
 
 Before taking an alternative way to generalize the constitutive model, we need analyze the data first. This is a multiple-features dataset. Although EDA does not reflect any strong linear characteristic, some features have local or segmented linear characteristics with the target in the dataset. For instance, the relationship between stress and strain has segmented linearity. For the other features, temperature, strain rate and porosity, they are not continuous, and concentrate on several values. Such features may not suitable for scaling, and we may choose a machine learning algorithm which does not need feature scaling.
 
@@ -318,7 +318,7 @@ Decision Tree Regression (DTR) is a wonderful candidate to deal with this datase
 
 In this section, we will try to use DTR with AdaBoost(ABR) to generalize the constitutive model.
 
-#### 8.1 Data Reprocessing
+### 8.1 Data Reprocessing
 
 
 ```python
@@ -352,7 +352,7 @@ print(Y_train)
 
 Now we get the new features and target data without scaling.
 
-#### 8.2 Training and Testing
+### 8.2 Training and Testing
 
 
 ```python
@@ -420,7 +420,7 @@ plt.show()
 
 As the figure shows, while <span style="background-color:#E0E0E0">max_depth</span> is larger than 10, the r^2 score tend to convergent to 1. While <span style="background-color:#E0E0E0">max_depth</span> is larger than 30, the MAE tend to convergent to 3. When <span style="background-color:#E0E0E0">max_depth</span> is around 50, we can get a hightest r^2 score and a smallest MAE. That means the optimal <span style="background-color:#E0E0E0">max_depth</span> for this model is near 50. 
 
-#### 8.3 Grid Research  to Fine-tune the Parameters
+### 8.3 Grid Research  to Fine-tune the Parameters
 
 We have squeeze the <span style="background-color:#E0E0E0">max_depth</span> into a small range near 50. Now we should find out the optimal <span style="background-color:#E0E0E0">max_depth</span>, with adjusting <span style="background-color:#E0E0E0">n_estimators</span> and <span style="background-color:#E0E0E0">learning_rate</span> simultaneously.
 
@@ -455,7 +455,7 @@ print("Tuned ABR Parameters: {}".format(opt_2.best_params_))
 
 By grid research, the best <span style="background-color:#E0E0E0">n_estimators</span> and <span style="background-color:#E0E0E0">learning_rate</span> can be determined. The best <span style="background-color:#E0E0E0">n_estimators</span> is 0.2, and the best <span style="background-color:#E0E0E0">learning_rate</span> is 54.
 
-#### 8.4 Testing the model with the original data
+### 8.4 Testing the model with the original data
 
 In this section, we will reconstruct the learning model with the optimal parameters, test the performance by a set of original data, and then show its performance.
 
@@ -532,7 +532,7 @@ plt.show()
 ![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/output_59_0.png)
 
 
-#### 8.5 Prediction of One-dimensional Constitutive Model
+### 8.5 Prediction of One-dimensional Constitutive Model
 
 In order to test the generalization ability of the model, we limit the strain rate and porosity and make the temperature varied:
 
@@ -725,7 +725,7 @@ The code of this section is in <mark>RegressionTree.py</mark>.
 
 
 
-### 9. Conclusion
+## 9. Conclusion
 
 This project demonstrates the magic of data science. 
 
@@ -737,9 +737,9 @@ Then, I visualized the constitutive model by presenting the stress-strain curves
 
 
 
-### 10. Potential Improvement
+## 10. Potential Improvement
 
-#### 10.1 The Improvement of the Prediction Model
+### 10.1 The Improvement of the Prediction Model
 
 A good model may not be built in one day, and it needs be upgraded continuously. Although Adaboost & tree regression show the high accuracy of data fitting and good performance for the prediction with the features out of the dataset. However, the generalizaion ability of tree regression depends on the data integrity. When the values of the features are far away that in the dataset, the preduction may distort.
 
@@ -753,7 +753,7 @@ For this project, the features have non-linear relationship with the target. The
 
 Because of the expensive calculation of neural network with model tree, this project does not use these complex algorithms. However, it may be a good method to improve this project.
 
-#### 10.2 GUI Implementation
+### 10.2 GUI Implementation
 
 This project concentrates on data organization and constructing the prediction model to generalize the constitutive model for porous titanium alloy. For users, it is convenient to look up the stress-strain curves in a GUI. Here is a sample of the GUI design.
 
