@@ -290,6 +290,7 @@ There are a number of potential reasons which lead to the bad imitative effect, 
 
 
 ```python
+from sklearn.model_selection import cross_val_score
 # Try different values for C from 800 to 1200, the interval is 50
 c_range = np.arange(800,1200,50)
 c_scores = []
@@ -383,6 +384,7 @@ We should continue to optimize the parameters in the model to improve prediction
 ```python
 from sklearn.model_selection import ShuffleSplit
 from sklearn.model_selection import learning_curve
+from sklearn.model_selection import cross_val_score
 # create 10 groups of cross-validation sets 
 cro_val = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
 # set figure size
