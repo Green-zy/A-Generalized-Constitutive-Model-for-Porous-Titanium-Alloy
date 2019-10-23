@@ -420,7 +420,7 @@ plt.show()
 ```
 
 
-![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/output_45_0.png)
+![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/output_45.png)
 
 
 As the figure shows, while `max_depth` is larger than 10, the r^2 score tend to convergent to 1. While `max_depth` is larger than 30, the MAE tend to convergent to 3. When `max_depth` is around 50, we can get a hightest r^2 score and a smallest MAE. That means the optimal `max_depth` for this model is near 50. 
