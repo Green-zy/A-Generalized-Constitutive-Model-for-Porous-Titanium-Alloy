@@ -744,7 +744,7 @@ A good model may not be built in one day, and it needs be upgraded continuously.
 
 To increase the generalization ability, R. Quinlan and Yong Wang invented the M5 algorithm, and later it was reconstructed to M5P for inducing trees of regression models. M5P algorithm combines a conventional decision tree with the possibility of linear regression functions at the nodes. The mechanism of the algorithm can be demonstrate by a picture:
 
-!()[https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/5.png]
+![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/5.png)
 
 This picture is from "https://github.com/ankonzoid/LearningX/tree/master/advanced_ML/model_tree". We can see that M5P algorithm inserts linear regression into the nodes of decision tree. It is effective to deal with the data whose features have strong linear relationship with the target.
 
@@ -756,4 +756,4 @@ Because of the expensive calculation of neural network with model tree, this pro
 
 This project concentrates on data organization and constructing the prediction model to generalize the constitutive model for porous titanium alloy. For users, it is convenient to look up the stress-strain curves in a GUI. Here is a sample of the GUI design.
 
-!()[https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/6.png]
+![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/6.png)
