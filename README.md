@@ -22,7 +22,7 @@ The first part was obtained from a research topic, 'Study on Mesoscale Cutting M
 
 However, the experiments for the constitutive relationship of dense titanium alloy were not performed. Therefore, the second part of data should be created, which describes the stress-strain relationship of dense titanium alloy(porosity=0). By literature research, [Research on Mechanical Properties Test and Dynamic Material Model of Ti6Al4V Titanium Alloy](http://cdmd.cnki.com.cn/Article/CDMD-10287-1013024078.htm) fits the Z-A constitutive model for dense titanium alloy. The chemical composition of Ti6Al4V is very close to the porous titanium alloy we use. Hence, the stress-strain relationship of dense titanium alloy with various temperatures and strain rates can be created according such Z-A constitutive model.
 
-The first part of data is in the file <mark>data.csv</mark>, and the code for creating the second part of data is in <mark>create_data.py</mark>, which will be shown in section 3.     
+The first part of data is in the file ***data.csv***, and the code for creating the second part of data is in ‘create_data.py’, which will be shown in section 3.     
 
 
 
