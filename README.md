@@ -109,6 +109,7 @@ Now the second part of data (supplementary data) is created, and it should be co
 
 
 ```python
+import pandas as pd
 data_origin = pd.read_csv('data.csv')
 print(data_origin.tail())
 ```
@@ -143,7 +144,9 @@ The variable `data_completion` stores the complete dataset which has 5 columns a
 
 
 ```python
+import numpy as np
 import seaborn as sns
+import matplotlib.pyplot as plt
 # calculate the covariance coefficients of the features
 corref = np.corrcoef(data_completion.values.T)
 df_corref = pd.DataFrame(corref, columns = ['stress', 'strain', 'T', 'strain rate', 'porosity'],
