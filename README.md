@@ -10,7 +10,7 @@ The constitutive relationship (stress - strain relationship) reflects a basic bu
 
 The research on porous titanium alloy is a hotspot since the porous titanium alloy has great application value in the aerospace and medical fields, and the generalized constitutive model for porous titanium alloy could provide the researchers a reference to basic mechanical properties without time-consuming compression experiments.
 
-![](C:\Users\59665\Desktop\oct\finish20-23\photo\1.png)
+![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/1.png)
 
 
 
