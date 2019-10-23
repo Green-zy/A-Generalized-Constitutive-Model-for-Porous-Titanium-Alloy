@@ -22,7 +22,7 @@ The first part was obtained from a research topic, 'Study on Mesoscale Cutting M
 
 However, the experiments for the constitutive relationship of dense titanium alloy were not performed. Therefore, the second part of data should be created, which describes the stress-strain relationship of dense titanium alloy(porosity=0). By literature research, [Research on Mechanical Properties Test and Dynamic Material Model of Ti6Al4V Titanium Alloy](http://cdmd.cnki.com.cn/Article/CDMD-10287-1013024078.htm) fits the Z-A constitutive model for dense titanium alloy. The chemical composition of Ti6Al4V is very close to the porous titanium alloy we use. Hence, the stress-strain relationship of dense titanium alloy with various temperatures and strain rates can be created according such Z-A constitutive model.
 
-The first part of data is in the file ***data.csv***, and the code for creating the second part of data is in `create_data.py`, which will be shown in section 3.     
+The first part of data is in the file ***data.csv***, and the code for creating the second part of data is in ***create_data.py***, which will be shown in section 3.     
 
 
 
@@ -44,7 +44,7 @@ Because the above formula only describes the compression process after yield sta
 
 ![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/4.png)
 
-The variables are in the constitutive model are stress, strain, temperature and strain rate. It is clear to determine temperature and strain rate first, and generate stress-strain curves. The code to create the second part of data is in <mark>create_data.py</mark>, and now we can run it.
+The variables are in the constitutive model are stress, strain, temperature and strain rate. It is clear to determine temperature and strain rate first, and generate stress-strain curves. The code to create the second part of data is in ***create_data.py***, and now we can run it.
 
 
 ```python
@@ -56,7 +56,7 @@ os.chdir('G:\\data') # change the current working directory
 
 ![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/output_8_0.png)
 
-By now, eight groups of supplementary data are created and combined. The data are saved in the variable <span style="background-color:#E0E0E0">data_supplement</span>.
+By now, eight groups of supplementary data are created and combined. The data are saved in the variable `data_supplement`.
 
 
 
@@ -105,7 +105,7 @@ Porosity is a measure of the void spaces in titanium alloy, i.e. a fraction of t
 
 ## 5. Data Organizing
 
-Now the second part of data (supplementary data) is created, and it should be combined with the first part of data, which is in the file <font color='grey'>data.csv</font>.
+Now the second part of data (supplementary data) is created, and it should be combined with the first part of data, which is in the file ***data.csv***.
 
 
 ```python
@@ -135,7 +135,7 @@ print(data_completion.tail())
     28892  650.272783  0.275821  25.0      2300.0      26.0
     28893  649.629803  0.276218  25.0      2300.0      26.0
 
-The variable <span style="background-color:#F0F0F0">data_completion</span> stores the complete dataset which has 5 columns and 28984 samples. The code for organizing data is in <mark>organize_data.py</mark>.
+The variable `data_completion` stores the complete dataset which has 5 columns and 28984 samples. The code for organizing data is in ***organize_data.py***.
 
 
 
@@ -166,7 +166,7 @@ The covariance coefficient between stress and strain is 0.47, which means the st
 
 The covariance coefficient between stress and porosity is -0.88, which shows a strong linear relationship. A simple conclusion is revealed that porosity influences the compression resistance of the titanium alloy, and high porosity titanium alloy has poorer compression resistance.
 
-The code for Exploratory Data Analysis is in <mark>EDA.py</mark>.
+The code for Exploratory Data Analysis is in ***EDA.py***.
 
 
 
@@ -254,7 +254,7 @@ from sklearn.svm import SVR
 reg_rbf = SVR(C=1050, kernel='rbf', gamma=4e-3, epsilon = 0.07)
 ```
 
-The most important SVR parameter is kernel type. For nonlinear regression, it is popular to select polynomial or gaussian. Here, he select RBF kernel, which is a kind of gaussian-type kernels. The other parameters are tentatively determined as following: <span style="background-color:#E0E0E0">gamma</span> = 4e-3, <span style="background-color:#E0E0E0">epsilon</span> = 0.07, and they can be adjusted according to the test results.
+The most important SVR parameter is kernel type. For nonlinear regression, it is popular to select polynomial or gaussian. Here, he select RBF kernel, which is a kind of gaussian-type kernels. The other parameters are tentatively determined as following: `gamma` = 4e-3, `epsilon` = 0.07, and they can be adjusted according to the test results.
 
 ### 7.3 Train/Test Split for Regression
 
@@ -306,7 +306,7 @@ By cross validation and parameter (C) adjustment, we get some means of the root 
 
 For such a kind of dataset, SVR may not be a suitable method. We need to use an alternative machien learning algorithm to express this dataset.
 
-The code for SVR is in <mark>SVR.py</mark>.
+The code for SVR is in ***SVR.py***.
 
 
 
@@ -418,11 +418,11 @@ plt.show()
 ![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/output_45_0.png)
 
 
-As the figure shows, while <span style="background-color:#E0E0E0">max_depth</span> is larger than 10, the r^2 score tend to convergent to 1. While <span style="background-color:#E0E0E0">max_depth</span> is larger than 30, the MAE tend to convergent to 3. When <span style="background-color:#E0E0E0">max_depth</span> is around 50, we can get a hightest r^2 score and a smallest MAE. That means the optimal <span style="background-color:#E0E0E0">max_depth</span> for this model is near 50. 
+As the figure shows, while `max_depth` is larger than 10, the r^2 score tend to convergent to 1. While `max_depth` is larger than 30, the MAE tend to convergent to 3. When `max_depth` is around 50, we can get a hightest r^2 score and a smallest MAE. That means the optimal `max_depth` for this model is near 50. 
 
 ### 8.3 Grid Research  to Fine-tune the Parameters
 
-We have squeeze the <span style="background-color:#E0E0E0">max_depth</span> into a small range near 50. Now we should find out the optimal <span style="background-color:#E0E0E0">max_depth</span>, with adjusting <span style="background-color:#E0E0E0">n_estimators</span> and <span style="background-color:#E0E0E0">learning_rate</span> simultaneously.
+We have squeeze the `max_depth` into a small range near 50. Now we should find out the optimal `max_depth`, with adjusting `n_estimators` and `learning_rate` simultaneously.
 
 
 ```python
@@ -438,7 +438,7 @@ print("Tuned DTR Parameters: {}".format(opt.best_params_))
     Tuned DTR Parameters: {'max_depth': 53.0}
 
 
-Now we get the best parameter for <span style="background-color:#E0E0E0">max_depth</span> is 53, and we continue to find the best <span style="background-color:#E0E0E0">n_estimators</span> and <span style="background-color:#E0E0E0">learning_rate</span>.
+Now we get the best parameter for `max_depth` is 53, and we continue to find the best `n_estimators` and `learning_rate`.
 
 
 ```python
@@ -453,7 +453,7 @@ print("Tuned ABR Parameters: {}".format(opt_2.best_params_))
     Tuned ABR Parameters: {'learning_rate': 0.2, 'n_estimators': 54}
 
 
-By grid research, the best <span style="background-color:#E0E0E0">n_estimators</span> and <span style="background-color:#E0E0E0">learning_rate</span> can be determined. The best <span style="background-color:#E0E0E0">n_estimators</span> is 0.2, and the best <span style="background-color:#E0E0E0">learning_rate</span> is 54.
+By grid research, the best `n_estimators` and `learning_rate` can be determined. The best `n_estimators` is 0.2, and the best `learning_rate` is 54.
 
 ### 8.4 Testing the model with the original data
 
@@ -721,7 +721,7 @@ plt.show()
 
 From the 3D figure, we find that porous titanium alloy presents the better plasticity in the high strain rate compression because the pores collapse with a larger strain. This prediction conforms to the law from the compression test data, which proves the high accuracy of this constitutive model.
 
-The code of this section is in <mark>RegressionTree.py</mark>.
+The code of this section is in ***RegressionTree.py***.
 
 
 
