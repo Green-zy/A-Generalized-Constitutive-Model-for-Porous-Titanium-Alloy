@@ -1,3 +1,10 @@
+"""
+
+ create_data.py  (author: Yun Zhou/ git: Green-zy)
+
+ Create the stress-strain curves with mutiple temperatures, strain rates and porosities.
+
+"""
 import math
 import numpy as np
 import pandas as pd
