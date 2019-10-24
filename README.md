@@ -139,6 +139,7 @@ print(data_completion.tail())
 The variable `data_completion` stores the complete dataset which has 5 columns and 28984 samples. The code for organizing data is in ***organize_data.py***.
 
 Here is the list of the data distribution:
+
 | Porosity (%) | Temperature (℃) | Strain rate (/s) | Samples |
 | ---- | ---- | ---- | ---- | 
 | 0 | 20 | 500 | 799 |  
