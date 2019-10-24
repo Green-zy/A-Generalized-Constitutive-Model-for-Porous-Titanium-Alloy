@@ -136,7 +136,7 @@ print(data_completion.tail())
     28892  650.272783  0.275821  25.0      2300.0      26.0
     28893  649.629803  0.276218  25.0      2300.0      26.0
 
-The variable `data_completion` stores the complete dataset which has 5 columns and 28984 samples. The code for organizing data is in ***organize_data.py***.
+The variable `data_completion` stores the complete dataset which has 5 columns and 28894 samples. The code for organizing data is in ***organize_data.py***.
 
 Here is the list of the data distribution:
 
