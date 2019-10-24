@@ -582,7 +582,9 @@ plt.show()
 
 ### 8.5 Prediction of One-dimensional Constitutive Model
 
-In order to test the generalization ability of the model, we limit the strain rate and porosity and make the temperature varied:
+In order to test the generalization ability of the model, we can adopt a variable-control strategy which sets one feature free and constrains the other features.
+
+First, we limit the strain rate and porosity and make the temperature varied:
 
 Group 1: strain rate = 2380, porosity = 27.5%, varied temperatures
 
