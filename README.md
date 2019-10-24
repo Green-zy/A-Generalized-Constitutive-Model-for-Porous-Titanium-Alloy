@@ -586,7 +586,7 @@ In order to test the generalization ability of the model, we can adopt a variabl
 
 First, we limit the strain rate and porosity and make the temperature varied:
 
-Group 1: strain rate = 2380, porosity = 27.5%, varied temperatures
+Group 1: strain rate = 2380/s, porosity = 27.5%, varied temperatures(20℃,80℃,160℃,220℃,280℃,)
 
 ```python
 from mpl_toolkits.mplot3d import axes3d
@@ -653,7 +653,7 @@ The predicted shapes of the curves are reasonable since they have these importan
 
 Now, we change the varied dimension from temperature to porosity:
 
-Group 2: temperature = 120℃, strain rate = 550, varied porosity
+Group 2: temperature = 120℃, strain rate = 550, varied porosity(5%, 25%, 45%)
 
 
 ```python
@@ -702,7 +702,7 @@ The 3D figure indicates that the titanium alloy with larger porosity has weaker 
 
 Now, we change the varied dimension from porosity to strain rate:
 
-Group 3: temperature = 315℃, porosity = 25.5%, varied strain rate
+Group 3: temperature = 315℃, porosity = 25.5%, varied strain rate(1000/s,1500/s,2000/s,2500/s,3000/s)
 
 
 ```python
