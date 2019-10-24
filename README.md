@@ -359,7 +359,7 @@ The code for SVR is in ***SVR.py***.
 
 ## 8. A More Effective Way to Generalize the Constitutive Model
 
-Before taking an alternative way to generalize the constitutive model, we need analyze the data first. This is a multiple-features dataset. Although EDA does not reflect any strong linear characteristic, some features have local or segmented linear characteristics with the target in the dataset. For instance, the relationship between stress and strain has segmented linearity. For the other features, temperature, strain rate and porosity, they are not continuous, and concentrate on several values. Such features may not suitable for scaling, and we may choose a machine learning algorithm which does not need feature scaling.
+Before taking an alternative way to generalize the constitutive model, we need reanalyze the data first. This is a multiple-features dataset. Although EDA does not reflect any strong linear characteristic, some features have local or segmented linear characteristics with the target in the dataset. For instance, the relationship between stress and strain has segmented linearity. For the other features, temperature, strain rate and porosity, they are not continuous, and concentrate on several values. Such features may not suitable for scaling, and we may choose a machine learning algorithm which does not need feature scaling.
 
 Decision Tree Regression (DTR) is a wonderful candidate to deal with this dataset cause it can split the data and express each part. Therefore, the local and segmented linearity of the data may be interpretated well by DTR. In addition, it is unnecessary for DTR to scale the features.
 
