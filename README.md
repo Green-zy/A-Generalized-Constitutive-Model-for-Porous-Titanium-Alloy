@@ -165,7 +165,7 @@ plt.plot()
 
 As the figure shows, the features reflect obvious nonlinear relationships. However, there are two exceptions: stress-porosity and stress-strain. 
 
-The covariance coefficient between stress and strain is 0.47, which means the stress rises with the increase of strain. By the plots in section 3, it's clear before the yield limit, the stress increases proportionally with strain, and after the yield, the relationship between stress and strain is nonlinear. 
+The covariance coefficient between stress and strain is 0.47, which means the stress rises with the increase of strain. By the plots in section 3, it is clear that before the yield limit, the stress increases proportionally with strain, and after the yield, the relationship between stress and strain is non-linear. 
 
 The covariance coefficient between stress and porosity is -0.88, which shows a strong linear relationship. A simple conclusion is revealed that porosity influences the compression resistance of the titanium alloy, and high porosity titanium alloy has poorer compression resistance.
 
