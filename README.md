@@ -74,7 +74,6 @@ print(data_supplement.tail())
     6406  3771.962094  0.399341  20.0      5000.0       0.0
     6407  3775.267864  0.399841  20.0      5000.0       0.0
 
-
 The presented data illustrate the structure of the dataset. There are totally 5 labels: stress, strain, temperature, strain rate, and porosity. 
 
 ######  -stress
@@ -216,156 +215,16 @@ The code for Exploratory Data Analysis is in ***EDA.py***.
 
 
 
-## 7. An Attempt to Generalize the Constitutive Model
 
-The generalization for constitutive model can be transferred into a regression problem in machine learning because we expect a set of stress values as the output, by giving a group of continuous strain values, including the specified temperature, strain rate, and porosity.
+## 7. A Mechine Learning Method to Generalize the Constitutive Model
 
-There are several useful and convenient regression  by algorithms, such as linear regression, random forests, decision tree regression, K-nearest neighbors (KNN), and support vector regression (SVR). Considering the nonlinearity between the features and the target and the amount of data samples, we use SVR preferentially.
-
-Compared to linear and polynomial kernels, the radial basis function (RBF) kernel is more suitable to deal with nonlinear regression. Hence, we will choose SVR using RBF kernel to generalize this constitutive model.
-
-### 7.1 Data Preprocessing (Scale Feature Values & Shuffle and Split Data)
-
-As the output shows above, these four features differ significantly in value magnitude. For example, the range of strain is from 0 to 0.5098, whereas the range of strain rate is from 500 to 5200. If we input these samples for training directly, the contours of the cost function will be prolate rather than round, and the process of gradient descent will not only be tortuous but also time-consuming.
-
-Therefore, the feature values need to remove the mean and scale to unit variance.
-
-
-```python
-from sklearn.preprocessing import StandardScaler
-X = data_completion.loc[ : ,'strain':]
-Y = data_completion.loc[ : , 'stress']
-Y = pd.DataFrame(Y)
-sc_X = StandardScaler().fit(X)
-sc_Y = StandardScaler().fit(Y)
-X = sc_X.transform(X)
-Y = sc_Y.transform(Y)
-print('The feature values after scaling:')
-print(X)
-print('The target values after scaling:')
-print(Y)
-```
-
-    The feature values after scaling:
-    [[-1.2921348  -1.15813773 -1.52238074 -1.76974259]
-     [-1.28786917 -1.15813773 -1.52238074 -1.76974259]
-     [-1.28360353 -1.15813773 -1.52238074 -1.76974259]
-     ...
-     [ 1.05756264 -1.11648986 -0.11249068  0.18250009]
-     [ 1.06097153 -1.11648986 -0.11249068  0.18250009]
-     [ 1.06435822 -1.11648986 -0.11249068  0.18250009]]
-    The target values after scaling:
-    [[-0.90539988]
-     [-0.78576907]
-     [-0.66613826]
-     ...
-     [-0.14845767]
-     [-0.14652338]
-     [-0.14727374]]
-
-
-Now, we have finished the standard scaling for the feature values.
-
-
-```python
-from sklearn.model_selection import train_test_split
-# Shuffle and split the data into training and testing subsets
-X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state = 42)
-print('Train_features:')
-print(X_train)
-Y_train = np.array(Y_train).ravel()
-print('Train_target:')
-print(Y_train)
-```
-
-    Train_features:
-    [[-0.07935153  0.34118563 -0.38663597  0.18250009]
-     [-0.38526605 -0.49177179  0.7491088   0.93336266]
-     [-0.12581627  1.17414306  1.61070829  0.93336266]
-     ...
-     [-1.04094319  0.34118563 -1.52238074 -1.76974259]
-     [-0.70081959  1.17414306 -1.05241739  0.18250009]
-     [ 0.53943884 -0.49177179  0.7491088   0.93336266]]
-    Train_target:
-    [-0.44691848 -0.58882242 -0.56561325 ...  0.52207009 -0.33247567
-     -0.45025277]
-
-The data is split into four parts: X_train, X_test, Y_train, Y_test, and the order is shuffled.
-
-### 7.2 Create Support Vector Regressor
-
-
-```python
-from sklearn.svm import SVR
-reg_rbf = SVR(C=1050, kernel='rbf', gamma=4e-3, epsilon = 0.07)
-```
-
-The most important SVR parameter is kernel type. For nonlinear regression, it is popular to select polynomial or gaussian. Here, he select RBF kernel, which is a kind of gaussian-type kernels. The other parameters are tentatively determined as following: `gamma` = 4e-3, `epsilon` = 0.07, and they can be adjusted according to the test results.
-
-### 7.3 Train/Test Split for Regression
-
-
-```python
-from sklearn.metrics import mean_squared_error
-from sklearn.metrics import mean_absolute_error
-reg_rbf.fit(X_train, Y_train)
-Y_pred = reg_rbf.predict(X_test)
-Y_pred = sc_Y.inverse_transform(Y_pred.reshape(-1, 1))
-# output R2 score
-print("R^2: {}".format(reg_rbf.score(X_test, Y_test)))
-# output root mean squared error
-rmse = np.sqrt(mean_squared_error(sc_Y.inverse_transform(Y_test), Y_pred))
-print("Root Mean Squared Error: {}".format(rmse))
-mae = mean_absolute_error(sc_Y.inverse_transform(Y_test), Y_pred)
-print("Mean Absolute Error: {}".format(mae))
-```
-
-    R^2: 0.9911893022042685
-    Root Mean Squared Error: 79.7868956403183
-    Mean Absolute Error: 57.21476171490674
-
-
-According to the root mean squared error, we can preliminarily suppose that this model by MVR using RBF kernel is not good. In the high porosity circumstance, the pores will collapse around 500 MPa, that means during the compression process, the highest stress is around 500 MPa. Therefore, a root mean squared error which is larger than 79 MPa is unaccepted.
-
-There are a number of potential reasons which lead to the bad imitative effect, such as under fitting/over fitting and the inapplicability of SVR to this dataset. We can use cross validation to eliminate under fitting/over fitting. 
-
-### 7.4 Cross Validation & Parameters Adjustment
-
-
-```python
-from sklearn.model_selection import cross_val_score
-# Try different values for C from 800 to 1200, the interval is 50
-c_range = np.arange(800,1200,50)
-c_scores = []
-for c in c_range:
-    reg = SVR(C=c, kernel='rbf', gamma=4e-3, epsilon = 0.07)
-    score = cross_val_score(reg,X_train,Y_train, cv=5, scoring='neg_mean_squared_error')
-    score = sc_Y.inverse_transform(-score)
-    score = np.sqrt(score)
-    c_scores.append(score.mean())
-print(c_scores)
-```
-
-    [27.993575181697025, 27.993275224507965, 27.99301092386428, 27.992710899780594, 27.99238168938565, 27.992096675368703, 27.991849814249417, 27.991614771488326]
-
-
-By cross validation and parameter (C) adjustment, we get some means of the root squared errors. All of them are around 30 MPa, and they are still unacceptable. Because these results come out by cross validation, we can exclude under fitting and over fitting in the model. 
-
-For such a kind of dataset, SVR may not be a suitable method. We need to use an alternative machien learning algorithm to express this dataset.
-
-The code for SVR is in ***SVR.py***.
-
-
-
-## 8. A More Effective Way to Generalize the Constitutive Model
-
-Before taking an alternative way to generalize the constitutive model, we need reanalyze the data first. This is a multiple-features dataset. Although EDA does not reflect any strong linear characteristic, some features have local or segmented linear characteristics with the target in the dataset. For instance, the relationship between stress and strain has segmented linearity. For the other features, temperature, strain rate and porosity, they are not continuous, and concentrate on several values. Such features may not suitable for scaling, and we may choose a machine learning algorithm which does not need feature scaling.
+Before using a mechine learning method to generalize the constitutive model, we need reanalyze the data first. This is a multiple-features dataset. Although EDA does not reflect any strong linear characteristic, some features have local or segmented linear characteristics with the target in the dataset. For instance, the relationship between stress and strain has segmented linearity. For the other features, temperature, strain rate and porosity, they are not continuous, and concentrate on several values. Such features may not suitable for scaling, and we may choose a machine learning algorithm which does not need feature scaling.
 
 Decision Tree Regression (DTR) is a wonderful candidate to deal with this dataset cause it can split the data and express each part. Therefore, the local and segmented linearity of the data may be interpretated well by DTR. In addition, it is unnecessary for DTR to scale the features.
 
-In this section, we will try to use DTR with AdaBoost(ABR) to generalize the constitutive model.
+In this section, we will try to use DTR with AdaBoost(ABDT) to generalize the constitutive model.
 
-### 8.1 Data Reprocessing
+### 7.1 Data Reprocessing
 
 
 ```python
@@ -399,7 +258,7 @@ print(Y_train)
 
 Now we get the new features and target data without scaling.
 
-### 8.2 Training and Testing
+### 7.2 Training and Testing
 
 
 ```python
@@ -468,7 +327,7 @@ plt.show()
 
 As the figure shows, while `max_depth` is larger than 10, the r^2 score tend to convergent to 1. While `max_depth` is larger than 30, the MAE tend to convergent to 3. When `max_depth` is around 50, we can get a hightest r^2 score and a smallest MAE. That means the optimal `max_depth` for this model is near 50. 
 
-### 8.3 Grid Research  to Fine-tune the Parameters
+### 7.3 Grid Research  to Fine-tune the Parameters
 
 We have squeeze the `max_depth` into a small range near 50. Now we should find out the optimal `max_depth`, with adjusting `n_estimators` and `learning_rate` simultaneously.
 
@@ -503,7 +362,7 @@ print("Tuned ABR Parameters: {}".format(opt_2.best_params_))
 
 By grid research, the best `n_estimators` and `learning_rate` can be determined. The best `n_estimators` is 0.2, and the best `learning_rate` is 54.
 
-### 8.4 Testing the model with the original data
+### 7.4 Testing the model with the original data
 
 In this section, we will reconstruct the learning model with the optimal parameters, test the performance by a set of original data, and then show its performance.
 
@@ -580,7 +439,7 @@ plt.show()
 ![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/output_59_0.png)
 
 
-### 8.5 Prediction of One-dimensional Constitutive Model
+### 7.5 Prediction of One-dimensional Constitutive Model
 
 In order to test the generalization ability of the model, we can adopt a variable-control strategy which sets one feature free and constrains the other features.
 
@@ -773,23 +632,7 @@ From the 3D figure, we find that porous titanium alloy presents the better plast
 
 The code of this section is in ***RegressionTree.py***.
 
-
-
-## 9. Conclusion
-
-This project demonstrates the magic of data science. 
-
-First of all, this project integrated the compression test data of porous titanium alloy with the "created" compression data of dense titanium alloy according to the constitutive formulas concluded in the published literature.
-
-Based on the integrated dataset, I tried some machine learning algorithms to generalize the constitutive model for porous titanium alloy. Support vector regression did not show the good performance, and I finally chose Adaboost regression with regression tree to generalize the constitutive model.
-
-Then, I visualized the constitutive model by presenting the stress-strain curves along three different dimensions. The characteristics of the curves conformed to the expected.
-
-
-
-## 10. Potential Improvement
-
-### 10.1 The Improvement of the Prediction Model
+### 7.6 The Potential Improvement of the Prediction Model
 
 A good model may not be built in one day, and it needs be upgraded continuously. Although Adaboost & tree regression show the high accuracy of data fitting and good performance for the prediction with the features out of the dataset. However, the generalizaion ability of tree regression depends on the data integrity. When the values of the features are far away that in the dataset, the preduction may distort.
 
@@ -803,8 +646,156 @@ For this project, the features have non-linear relationship with the target. The
 
 Because of the expensive calculation of neural network with model tree, this project does not use these complex algorithms. However, it may be a good method to improve this project.
 
-### 10.2 GUI Implementation
+
+
+## 8. An More Effective Way to Generalize the Constitutive Model (ABDT Denoising + fitting by dimensionality reduction)
+
+From the last section, it's clear that along a single dimension, the adjacent strss-strain curves are strongly similar. This feature shows the poor generalization of decision tree algorithm. However, ABDT has very high precision to predict the original data. Hence, we can denoising the sample data by ABDT. Then, we predict the stress-strain curve with specific parameters by dimension-reduction fitting with adjacent points.
+
+### 8.1 Denoising for Sample Data by ABDT
+
+Because of the length, the code for denoising is in ***denoise.py***. Run it.
+```python
+print(denoise_data.tail())
+```
+
+              stress  strain    T  strainrate  porosity
+    4687  416.263649  0.5000  300        4500        36
+    4688  415.197602  0.5025  300        4500        36
+    4689  411.175714  0.5050  300        4500        36
+    4690  406.643546  0.5075  300        4500        36
+    4691  405.657323  0.5100  300        4500        36
+
+### 8.2 Research Tree for Dimension-reduction Fitting
+
+The target of this section is to predict the constitutive relation with a certain porosity, temperature and strain rate by linear fitting with adjacent data points. The adjacent data points mean two closed data points of the target data points. By denoising, the gaps between strains are same. It's necessary to do dimension-reduction fitting for three times in respectively perspective of strain rate, temperature and porosity. The order of the dimension-reduction fitting depends on the data density of the features. Below is the search tree based on the data after denoising. It's clear that from the density, strain rate > temperature > porosity. Therefore, in the process of searching adjacent data points, the order is porosity first, temperature second, and strain rate third. In reverse, for dimension reduction, strain rate is the first, temperature is the second, and porosity is the third.
+
+![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/tree.png)
+
+For example, here, suppose the constitutive relation that needs to be predicted is 30% porisity, 80℃ temperature, and 1500/s strain rate. The adjacet porosities of 30% porosity are 26% and 36%. Now, we have two paths: R-26 and R-36. Go head, the adjacent temperatures of 80℃ are 25 and 100. And the adjacent temperatures of 80℃ are 25 and 100. Unitl now, we have got four paths: the first is R-26-25; the second is R-26-100; the third is R-36-25; the forth is R-36-100. In the first path R-26-25, the adjacent strain rates of 1500/s are 1200 and 2300. In the second path R-26-100, the adjacent strain rates of 1500/s are 950 and 2200. In the third path R-36-25, the adjacent strain rates of 1500/s are 1000 and 2000. In the forth path R-36-100, the adjacent strain rates of 1500/s are 1300 and 2050. 
+
+Finally, eights paths representing the adjacent points have been found. They are R-26-25-1200, R-26-25-2300, R-26-100-950, R-26-100-2200, R-36-25-1000, R-36-25-2000,R-36-100-1300, R-36-100-2050. 
+
+The code for research tree is in ***research_tree.py***. Run it.
+
+### 8.3 Dimension-reduction Fitting in Porosity, Temperature, and Strain Rate Dimensions 
+
+First, we fit strain rate. There will be four fitting results: R-26-25-1500, R-26-100-1500, R-36-25-1500, and R-36-100-1500.
+
+        R-26-25-1500 = (1500-1200)/(2300-1200) * (R-26-25-2300 - R-26-25-1200) + R-26-25-1200
+        R-26-100-1500 = (1500-950)/(2200-950) * (R-26-100-2200 - R-26-100-950) + R-26-100-950 
+        R-36-25-1500 = (1500-1000)/(2000-1000) * (R-36-25-2000 - R-36-25-1000) + R-36-25-2000
+        R-36-100-1500 = (1500-1300)/(2050-1300) * (R-36-100-2050 - R-36-100-1300) + R-36-100-1300
+        
+Then, we fit temperature. There will be two fitting results: R-26-80-1500 and R-36-80-1500.
+
+        R-26-80-1500 = (80-25)/(100-25) * (R-26-100-1500 - R-26-25-1500) + R-26-25-1500
+        R-36-80-1500 = (80-25)/(100-25) * (R-36-100-1500 - R-36-25-1500) + R-36-25-1500
+        
+Finally, we fit porosity. We will get the target fitting data: R-30-80-1500.
+
+        R-30-80-1500 = (30-26)/(36-26) * (R-36-80-1500 - R-26-80-1500) + R-26-80-1500
+        
+The code for demension-reduction fitting is in ***drf.py***. Run it.
+
+### 8.4 Result Visualization
+
+Similar to 7.5, we set three groups.
+
+Group 1: temperature = 120℃, strain rate = 2380/s, varied porosities(20, 25, 30, 35)%
+```python
+from mpl_toolkits.mplot3d import axes3d
+
+# set plot for prediction
+fig_pred1 = plt.figure(figsize=(13,9))
+ax_pre1 = fig_pred1.gca(projection='3d')
+PREDICT1 = dr_fitting(20,129,650)
+PREDICT2 = dr_fitting(25,129,650)
+PREDICT3 = dr_fitting(30,129,650)
+PREDICT4 = dr_fitting(35,129,650)
+
+ax_pre1.plot(PREDICT1['strain'], PREDICT1['stress'], zs=20, zdir='y', color = 'red')
+ax_pre1.plot(PREDICT2['strain'], PREDICT2['stress'], zs=25, zdir='y', color = 'blue')
+ax_pre1.plot(PREDICT3['strain'], PREDICT3['stress'], zs=30, zdir='y', color = 'orange')
+ax_pre1.plot(PREDICT4['strain'], PREDICT4['stress'], zs=35, zdir='y', color = 'purple')
+
+ax_pre1.set_xlabel('Strain')
+ax_pre1.set_ylabel('Porosity(%)')
+ax_pre1.set_zlabel('Stress(MPa)')
+ax_pre1.set_title("Stress-strain curves \n (T = 120℃, strain rate = 2550) ")
+ax_pre1.view_init(elev=35., azim=-60)
+plt.show()
+```
+![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/v1.png)
+
+Group 2: porosity = 27.5%, strain rate = 2550/s, temperatures(80, 160, 220, 280)℃
+```python
+# set plot for prediction
+fig_pred1 = plt.figure(figsize=(13,9))
+ax_pre1 = fig_pred1.gca(projection='3d')
+
+PREDICT1 = dr_fitting(27.5,80,2380)
+PREDICT2 = dr_fitting(27.5,160,2380)
+PREDICT3 = dr_fitting(27.5,220,2380)
+PREDICT4 = dr_fitting(27.5,280,2380)
+
+ax_pre1.plot(PREDICT1['strain'], PREDICT1['stress'], zs=80, zdir='y', color = 'blue')
+ax_pre1.plot(PREDICT2['strain'], PREDICT2['stress'], zs=160, zdir='y', color = 'orange')
+ax_pre1.plot(PREDICT3['strain'], PREDICT3['stress'], zs=220, zdir='y', color = 'purple')
+ax_pre1.plot(PREDICT4['strain'], PREDICT4['stress'], zs=280, zdir='y', color = 'green')
+
+ax_pre1.set_xlabel('Strain')
+ax_pre1.set_ylabel('Temperature(℃)')
+ax_pre1.set_zlabel('Stress(MPa)')
+ax_pre1.set_title("Stress-strain curves \n (porosity = 27.5, strain rate = 2550) ")
+ax_pre1.view_init(elev=35., azim=-60)
+plt.show()
+```
+![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/v2.png)
+
+Group 3: porosity = 25.5%, temperature = 195℃, strain rates(1000, 1500, 2000, 2500, 3000)/s
+```python
+# set plot for prediction
+fig_pred1 = plt.figure(figsize=(13,9))
+ax_pre1 = fig_pred1.gca(projection='3d')
+
+PREDICT1 = dr_fitting(25.5,195,1000)
+PREDICT2 = dr_fitting(25.5,195,1500)
+PREDICT3 = dr_fitting(25.5,195,2000)
+PREDICT4 = dr_fitting(25.5,195,2500)
+PREDICT5 = dr_fitting(25.5,195,3000)
+ax_pre1.plot(PREDICT1['strain'], PREDICT1['stress'], zs=1000, zdir='y', color = 'blue')
+ax_pre1.plot(PREDICT2['strain'], PREDICT2['stress'], zs=1500, zdir='y', color = 'orange')
+ax_pre1.plot(PREDICT3['strain'], PREDICT3['stress'], zs=2000, zdir='y', color = 'purple')
+ax_pre1.plot(PREDICT4['strain'], PREDICT4['stress'], zs=2500, zdir='y', color = 'green')
+ax_pre1.plot(PREDICT5['strain'], PREDICT5['stress'], zs=3000, zdir='y', color = 'red')
+ax_pre1.set_xlabel('Strain')
+ax_pre1.set_ylabel('Strain rate(/s)')
+ax_pre1.set_zlabel('Stress(MPa)')
+ax_pre1.set_title("Stress-strain curves \n (T = 195℃, porosity = 25.5%) ")
+ax_pre1.view_init(elev=35., azim=-60)
+plt.show()
+```
+![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/v3.png)
+
+
+## 9. GUI Implementation
 
 This project concentrates on data organization and constructing the prediction model to generalize the constitutive model for porous titanium alloy. For users, it is convenient to look up the stress-strain curves in a GUI. Here is a sample of the GUI design.
 
 ![](https://github.com/Green-zy/A-Generalized-Constitutive-Model-for-Porous-Titanium-Alloy/blob/master/photos/6.png)
+
+
+## 10. Conclusion
+
+This project demonstrates the magic of data science. 
+
+First of all, this project integrated the compression test data of porous titanium alloy with the "created" compression data of dense titanium alloy according to the constitutive formulas concluded in the published literature.
+
+Based on the integrated dataset, I tried some machine learning algorithm(ABDT) to generalize the constitutive model for porous titanium alloy. Because the generalization ability of ABDT is not good, I finally choose a more effective way to build the constitutive model. The organized data should be denoised by ABDT first, then the target constitutive relation with specific porosity, temperature and strain rate can be fitted by dimension reduction.
+
+Then, I visualized the constitutive model by presenting the stress-strain curves along three different dimensions. The characteristics of the curves conformed to the expected.
+
+
+
+
